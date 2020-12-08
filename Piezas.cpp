@@ -9,23 +9,23 @@
  *  https://en.wikipedia.org/wiki/Connect_Four
  *
  * Board coordinates [row,col] should match with:
- * [2,0][2,1][2,2][2,3]
- * [1,0][1,1][1,2][1,3]
- * [0,0][0,1][0,2][0,3]
+ * [2,0][2,1][2,2][2,BOARD_ROWS]
+ * [1,0][1,1][1,2][1,BOARD_ROWS]
+ * [0,0][0,1][0,2][0,BOARD_ROWS]
  * So that a piece dropped in column 2 should take [0,2] and the next one
  * dropped in column 2 should take [1,2].
  **/
 
 
 /**
- * Constructor sets an empty board (default 3 rows, 4 columns) and 
+ * Constructor sets an empty board (default BOARD_ROWS rows, BOARD_COLS columns) and 
  * specifies it is X's turn first
  **/
 Piezas::Piezas()
 {
-  for (int i = 0; i < 3; ++i) {
+  for (int i = 0; i < BOARD_ROWS; ++i) {
     board.push_back(std::vector<Piece>());
-    for (int j = 0; j < 4; ++j) {
+    for (int j = 0; j < BOARD_COLS; ++j) {
       board[i].push_back(Blank);
     }
   }
@@ -39,8 +39,8 @@ Piezas::Piezas()
  **/
 void Piezas::reset()
 {
-  for (int i = 0; i < 3; ++i) {
-    for (int j = 0; j < 4; ++j) {
+  for (int i = 0; i < BOARD_ROWS; ++i) {
+    for (int j = 0; j < BOARD_COLS; ++j) {
       board[i][j] = Blank;
     }
   }
@@ -62,10 +62,10 @@ Piece Piezas::dropPiece(int column)
   } else {
     turn = X;
   }
-  if (column < 0 || column > 4) {
+  if (column < 0 || column >= BOARD_COLS) {
     return Invalid;
   }
-  for (int i = 0; i < 3; ++i) {
+  for (int i = 0; i < BOARD_ROWS; ++i) {
     if (board[i][column] == Blank) {
       board[i][column] = current;
       return current;
@@ -80,7 +80,7 @@ Piece Piezas::dropPiece(int column)
  **/
 Piece Piezas::pieceAt(int row, int column)
 {
-  if (row < 0 || row > 3 || column < 0 || column > 4) {
+  if (row < 0 || row >= BOARD_ROWS || column < 0 || column >= BOARD_COLS) {
     return Invalid;
   }
   return board[row][column];
@@ -100,24 +100,17 @@ Piece Piezas::gameState()
   int x_max = 0, o_max = 0;
 
   // Check horizontally
-  for (int i = 0; i < 3; ++i) {
+  for (int i = 0; i < BOARD_ROWS; ++i) {
     int x_count = 0, o_count = 0;
-    for (int j = 0; j < 4; ++j) {
-      // Check if not over
-      if (board[i][j] == Blank) {
-        return Invalid;
-      }
-
+    for (int j = 0; j < BOARD_COLS; ++j) {
       if (board[i][j] == X) {
         ++x_count;
-      } else {
-        x_count = 0;
-      }
-
-      if (board[i][j] == O) {
-        ++o_count;
-      } else {
         o_count = 0;
+      } else if (board[i][j] == O) {
+        ++o_count;
+        x_count = 0;
+      } else {
+        return Invalid;
       }
 
       x_max = std::max(x_max, x_count);
@@ -126,19 +119,15 @@ Piece Piezas::gameState()
   }
 
   // Check vertically
-  for (int j = 0; j < 4; ++j) {
+  for (int j = 0; j < BOARD_COLS; ++j) {
     int x_count = 0, o_count = 0;
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < BOARD_ROWS; ++i) {
       if (board[i][j] == X) {
         ++x_count;
-      } else {
-        x_count = 0;
-      }
-
-      if (board[i][j] == O) {
-        ++o_count;
-      } else {
         o_count = 0;
+      } else {
+        ++o_count;
+        x_count = 0;
       }
 
       x_max = std::max(x_max, x_count);
