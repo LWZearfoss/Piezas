@@ -9,16 +9,16 @@
  *  https://en.wikipedia.org/wiki/Connect_Four
  *
  * Board coordinates [row,col] should match with:
- * [2,0][2,1][2,2][2,BOARD_ROWS]
- * [1,0][1,1][1,2][1,BOARD_ROWS]
- * [0,0][0,1][0,2][0,BOARD_ROWS]
+ * [2,0][2,1][2,2][2,3]
+ * [1,0][1,1][1,2][1,3]
+ * [0,0][0,1][0,2][0,3]
  * So that a piece dropped in column 2 should take [0,2] and the next one
  * dropped in column 2 should take [1,2].
  **/
 
 
 /**
- * Constructor sets an empty board (default BOARD_ROWS rows, BOARD_COLS columns) and 
+ * Constructor sets an empty board (default 3 rows, 4 columns) and 
  * specifies it is X's turn first
  **/
 Piezas::Piezas()
